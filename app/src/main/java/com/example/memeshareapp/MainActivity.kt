@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         progressbar.visibility = View.VISIBLE;
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(this)
-        val url = "http://meme-api.herokuapp.com/gimme"
+        val url = "https://meme-api.herokuapp.com/gimme"
 
         // Request a string response from the provided URL.
         val jsonObjectRequest  = JsonObjectRequest(Request.Method.GET, url, null,
@@ -78,7 +78,9 @@ class MainActivity : AppCompatActivity() {
                     })
                     .into(memeimage)
             },
-            {})
+            Response.ErrorListener {
+                Toast.makeText(this,it.localizedMessage,Toast.LENGTH_SHORT).show()
+            })
 
         // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
