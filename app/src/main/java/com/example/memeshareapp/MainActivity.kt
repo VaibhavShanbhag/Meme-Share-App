@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.android.volley.Request
@@ -41,9 +42,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadMeme(){
         progressbar.visibility = View.VISIBLE;
-        sharebtn.isEnabled = false
-        nextbtn.isEnabled = false
         // Instantiate the RequestQueue.
+        val queue = Volley.newRequestQueue(this)
         val url = "http://meme-api.herokuapp.com/gimme"
 
         // Request a string response from the provided URL.
@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
                             isFirstResource: Boolean
                         ) : Boolean{
                             progressbar.visibility = View.GONE
-                            nextbtn.isEnabled = true
                             return false;
                         }
 
@@ -73,20 +72,16 @@ class MainActivity : AppCompatActivity() {
                             isFirstResource: Boolean
                         ): Boolean {
                             progressbar.visibility = View.GONE
-                            nextbtn.isEnabled = true
-                            sharebtn.isEnabled = true
                             return false
                         }
 
                     })
                     .into(memeimage)
             },
-            Response.ErrorListener {
-                Toast.makeText(this,"Something went wrong",Toast.LENGTH_SHORT).show()
-            })
+            {})
 
         // Add the request to the RequestQueue.
-        MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+        queue.add(jsonObjectRequest)
 
     }
 }
